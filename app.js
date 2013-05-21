@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+    , jsonfile = require('jsonfile');
 
 var app = express();
 
@@ -20,8 +21,15 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-  app.use(require('stylus').middleware(__dirname + '/public'));
+app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// configure documentation
+jsonfile.readFile('./app.json', function(err, obj) {
+    console.log(err);
+    console.log(obj);
+    app.locals(obj);
+});
 
 // development only
 if ('development' == app.get('env')) {
