@@ -1,351 +1,349 @@
 extends includes/layout
 
 block sidebar
-  ul.nav.nav-list.bs-docs-sidenav.affix
-    +navItem("Conventions", "#conventions")
-    +navItem("Environment", "#env",  ".env-collapse")
-      ul.sub-nav.env-collapse.collapse
-        +subNavItem("Java", "#java")
-        +subNavItem("Ant", "#ant")
-        +subNavItem("Git", "#git")
-        +subNavItem("Environment Path", "#envpath")
-        +subNavItem("Mysql", "#mysql")
-        +subNavItem("Keystore", "#keystore")
-    +navItem("Building MDX", "#building",  ".build-collapse")
-      ul.sub-nav.build-collapse.collapse
-        +subNavItem("Get The Course", "#cloning")
-        +subNavItem("Setting Properties", "#properties")
-        +subNavItem("Compiling", "#compile")
-    +navItem("Running In Development", "#running", ".run-collapse")
-      ul.sub-nav.run-collapse.collapse
-        +subNavItem("Database Setup", "#database")
-        +subNavItem("Tomcat", "#tomcat")
-        +subNavItem("Open In Browser", "#browser")
+	ul.nav.nav-list.bs-docs-sidenav.affix
+		+navItem("Conventions", "#conventions")
+		+navItem("Environment", "#env",	".env-collapse")
+			ul.sub-nav.env-collapse.collapse
+				+subNavItem("Java", "#java")
+				+subNavItem("Ant", "#ant")
+				+subNavItem("Git", "#git")
+				+subNavItem("Environment Path", "#envpath")
+				+subNavItem("Mysql", "#mysql")
+				+subNavItem("Keystore", "#keystore")
+		+navItem("Building MDX", "#building",	".build-collapse")
+			ul.sub-nav.build-collapse.collapse
+				+subNavItem("Get The Course", "#cloning")
+				+subNavItem("Setting Properties", "#properties")
+				+subNavItem("Compiling", "#compile")
+		+navItem("Running In Development", "#running", ".run-collapse")
+			ul.sub-nav.run-collapse.collapse
+				+subNavItem("Database Setup", "#database")
+				+subNavItem("Tomcat", "#tomcat")
+				+subNavItem("Open In Browser", "#browser")
+		+navItem("Deploying MDX", "#deploy", ".deploy-collapse")
+			ul.sub-nav.deploy-collapse.collapse
+				+subNavItem("Commit Changes", "#commit")
+				+subNavItem("Backup Dest", "#backup")
+				+subNavItem("Deploy", "#dist-deploy")
+		+navItem("Disaster Recover Files", "#disaster")
+		+navItem("Cron", "#cron")
+
 
 block content
-  .hero-unit
-    h1 #{projectName}
-    p #{description}
+	.hero-unit
+		h1 #{projectName}
+		p #{description}
 
-  .section#preamble
-      h1 Preamble
-      p This purpose of this document is to cover all of the instructions necessary to build and run MDX.
-      p NOTE: Documentation is powered by nodejs. Run the doc server like this: <code>node app</code>.
+	.section#preamble
+		h1 Preamble
+		p This purpose of this document is to cover all of the instructions necessary to build and run MDX.
+		p NOTE: Documentation is powered by nodejs. Run the doc server like this: <code>node app</code>.
 
-  .section#conventions
-      h1 Conventions
+	.section#conventions
+		h1 Conventions
 
-      p Examples are given for the Linux platform. Please adjust as appropriate.
+		p Examples are given for the Linux platform. Please adjust as appropriate.
 
-      table.table.table-bordered.table-condensed
-        thead
-            tr
-                th Variable
-                th Description
-        tr
-            td.text-info [CODE_ROOT]
-            td The base folder where the code is checked out.
-        tr
-            td.text-info [CONFIG_ROOT]
-            td The parent directory of where the client and developer configurations are checked out.
+		table.table.table-bordered.table-condensed
+			thead
+					tr
+							th Variable
+							th Description
+			tr
+					td.text-info [CODE_ROOT]
+					td The base folder where the code is checked out.
+			tr
+					td.text-info [CONFIG_ROOT]
+					td The parent directory of where the client and developer configurations are checked out.
 
-  .section#env
-    h1 Environment
-    p Configure the pre-requisites for building #{projectName}
+	.section#env
+		h1 Environment
+		p Configure the pre-requisites for building #{projectName}
 
-    .section#java
-      h2 Install Java SE SDK
-      p.text-warning MDX requires the JDK, not the JRE.
-      p.text-info MDX is currently compatible with versions of Java 1.6
+		.section#java
+			h2 Install Java SE SDK
+			p.text-warning MDX requires the JDK, not the JRE.
+			p.text-info MDX is currently compatible with versions of Java 1.6
 
-      - var jdkDownload = "http://www.oracle.com/technetwork/java/javase/downloads/index.html"
-      ol
-        li Go to the <a href="#{jdkDownload}">Java download page</a>.
-        li Follow the links for <strong>downloading the Java SE JDK</strong>, agree to licensing and download.
-        li Set the environment variable <code>JAVA_HOME</code> to the path where you installed the JDK.
+			- var jdkDownload = "http://www.oracle.com/technetwork/java/javase/downloads/index.html"
+			ol
+				li Go to the <a href="#{jdkDownload}">Java download page</a>.
+				li Follow the links for <strong>downloading the Java SE JDK</strong>, agree to licensing and download.
+				li Set the environment variable <code>JAVA_HOME</code> to the path where you installed the JDK.
 
-      pre: code.bash.
-        set | grep JAVA_HOME
-        JAVA_HOME=/usr/java/jdk
+			pre: code.bash.
+				set | grep JAVA_HOME
+				JAVA_HOME=/usr/java/jdk
 
-      p.
-        Make <strong>jdk</strong>
-        a symlink to your most current version of java (e.g. /usr/java/jdk1.6.0_14).
-        This way you can install new JDKs and just change the symlink rather than updating environment variables.
+			p.
+				Make <strong>jdk</strong>
+				a symlink to your most current version of java (e.g. /usr/java/jdk1.6.0_14).
+				This way you can install new JDKs and just change the symlink rather than updating environment variables.
 
-      h3 Verify Java Version
+			h3 Verify Java Version
 
-      p Confirm Java is running the correct version
+			p Confirm Java is running the correct version
 
-      pre: code.bash.
-        $JAVA_HOME/bin/java -version
-        java version “1.6.0_14”
-        Java SE Runtime Environment
-        Java HotSpot™ Client VM (build 14.0-b16, mixed mode, sharing)
+			pre: code.bash.
+				$JAVA_HOME/bin/java -version
+				java version “1.6.0_14”
+				Java SE Runtime Environment
+				Java HotSpot™ Client VM (build 14.0-b16, mixed mode, sharing)
 
-    .section#ant
-      h2 Install Apache Ant
+		.section#ant
+			h2 Install Apache Ant
 
-      ol
-        li Download: http://ant.apache.org/bindownload.cgi (_min version 1.8.2_)​
-        li Unzip the file and place it wherever is appropriate on your system.
-        li Set the environment variable ANT_HOME to the path where you unzipped ant:
+			ol
+				li Download: http://ant.apache.org/bindownload.cgi (_min version 1.8.2_)​
+				li Unzip the file and place it wherever is appropriate on your system.
+				li Set the environment variable ANT_HOME to the path where you unzipped ant:
 
 
-      pre: code.bash.
-        set | grep ANT_HOME
-        ANT_HOME=/usr/local/ant
+			pre: code.bash.
+				set | grep ANT_HOME
+				ANT_HOME=/usr/local/ant
 
-      p Make <code>/usr/local/ant</code> a symlink to the installed apache-ant bin (e.g. /usr/local/apache-ant-1.8.2).
+			p Make <code>/usr/local/ant</code> a symlink to the installed apache-ant bin (e.g. /usr/local/apache-ant-1.8.2).
 
-      h3 Verify Ant Install & Version
+			h3 Verify Ant Install & Version
 
-      pre: code.bash.
-        $ANT_HOME/bin/ant -version
-        Apache Ant version 1.8.2 compiled on December 20 2010
+			pre: code.bash.
+				$ANT_HOME/bin/ant -version
+				Apache Ant version 1.8.2 compiled on December 20 2010
 
-    .section#git
-      h2 Install Git
-      p Source is stored in a Git repository. Download and install from here:
-        a(href="http://git-scm.com/download") http://git-scm.com/download
+		.section#git
+			h2 Install Git
+			p Source is stored in a Git repository. Download and install from here:
+				a(href="http://git-scm.com/download") http://git-scm.com/download
 
 
-    .section#envpath
-      h2 Environment Path
+		.section#envpath
+			h2 Environment Path
 
-      p Add <code>$JAVA_HOME/bin</code> and <code>$ANT_HOME/bin</code> to your path. For Linux do this:
+			p Add <code>$JAVA_HOME/bin</code> and <code>$ANT_HOME/bin</code> to your path. For Linux do this:
 
-      pre: code.bash.
-        echo "export PATH=$JAVA_HOME/bin:$ANT_HOME/bin:$PATH" >> ~/.bash_profile && . ~/.bash_profile
+			pre: code.bash.
+				echo "export PATH=$JAVA_HOME/bin:$ANT_HOME/bin:$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
-    .section#mysql
-      h2 Install MySQL
+		.section#mysql
+			h2 Install MySQL
 
-      p Only necessary if running database locally.
-        a(href="http://dev.mysql.com/downloads/mysql/") Download and install Community Server Version 5.x.
-      | Follow the appropriate install procedures for your platform.
-
-    .section#keystore
-      h2 Create a Keystore
-
-      p.
-        The application relies on ssl via https to transmit secure data (e.g.,
-        login passwords). In order for tomcat to communicate via https, you need
-        to have a keystore installed on the machine.
+			p Only necessary if running database locally.
+				a(href="http://dev.mysql.com/downloads/mysql/") Download and install Community Server Version 5.x.
+			| Follow the appropriate install procedures for your platform.
 
-      pre: code.bash.
-        $JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA -keystore /path/to/keystore
+		.section#keystore
+			h2 Create a Keystore
 
-      p For more details, please see the
-        a(href="http://tomcat.apache.org/tomcat-6.0-doc/ssl-howto.html") apache tomcat ssl howto.
+			p.
+				The application relies on ssl via https to transmit secure data (e.g.,
+				login passwords). In order for tomcat to communicate via https, you need
+				to have a keystore installed on the machine.
 
+			pre: code.bash.
+				$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA -keystore /path/to/keystore
 
-    .section#building
-      h1 Building MDX
+			p For more details, please see the
+				a(href="http://tomcat.apache.org/tomcat-6.0-doc/ssl-howto.html") apache tomcat ssl howto.
 
-    .section#cloning
-      h2 Get Source From Code Repository
 
-      p.
-        If this is the first time you are downloading the source code, clone the
-        git repositories using the following commands.
+	.section#building
+		h1 Building MDX
 
-      pre: code.bash.
-        git clone code.mandaladesigns.com:/repos/mandala/mdx_pub.git
-        mkdir mdx_config
-        cd mdx_config
-        git clone code.mandaladesigns.com:/repos/mandala/developer_mdx_config.git
-        git clone code.mandaladesigns.com:/repos/[client]/[client]_mdx_config.git
+		.section#cloning
+			h2 Get Source From Code Repository
 
-      p.text-info <code>[client]</code> is replaced with the client specific config name. For example, "shambhala", as in "shambhala_mdx_config.git"
+			p.
+				If this is the first time you are downloading the source code, clone the
+				git repositories using the following commands.
 
-      p When you are done, you should have a directory structure that looks something like the following:
+			pre: code.bash.
+				git clone code.mandaladesigns.com:/repos/mandala/mdx_pub.git
+				mkdir mdx_config
+				cd mdx_config
+				git clone code.mandaladesigns.com:/repos/mandala/developer_mdx_config.git
+				git clone code.mandaladesigns.com:/repos/[client]/[client]_mdx_config.git
 
+			p.text-info <code>[client]</code> is replaced with the client specific config name. For example, "shambhala", as in "shambhala_mdx_config.git"
 
-      pre: code.bash.
-        mdx_config
-        \- developer_mdx_config
-        \- [client]_mdx_config
-        mdx_pub
+			p When you are done, you should have a directory structure that looks something like the following:
 
-      p.text-info.
-        NOTE: The <code>stable</code> branch for src contains the latest stable source.
-        The "master" branch contains the latest stable config files.
 
+			pre: code.bash.
+				mdx_config
+				\- developer_mdx_config
+				\- [client]_mdx_config
+				mdx_pub
 
-      .section#properties
-        h2 Set Required Properties
-        p.
-          MDX relies on three special meta properties, <code>mmm_projectName, mmm_machineName, mmm_instanceName</code>,
-          to determine which config files will be used when the src is built. These properties are stored in
-          a generated file called _ant_build.properties_ located at /src/build.
-        |  There is an ant task to change these values to match the project you wish to run.
+			p.text-info.
+				NOTE: The <code>stable</code> branch for src contains the latest stable source.
+				The "master" branch contains the latest stable config files.
 
-        pre: code.bash.
-          ant -f instance-definitions-build.xml set.[TAB]
-      
-        p.
-          This will set the appropriate meta properties in your
-          <code>ant_build.properties</code> files, <strong>AND</strong>
-          pull the appropriate <code>rrr*properties</code> files
-          from <code>/developer_mdx_config</code> and <code>/[client]_mdx_config</code> into
-          <code>[CODE_ROOT]/src/build</code> and set them to be read-only so you don’t
-          attempt to edit them in the wrong place.
+		.section#properties
+			h2 Set Required Properties
+			p.
+				MDX relies on three special meta properties, <code>mmm_projectName, mmm_machineName, mmm_instanceName</code>,
+				to determine which config files will be used when the src is built. These properties are stored in
+				a generated file called _ant_build.properties_ located at /src/build.
+			|	There is an ant task to change these values to match the project you wish to run.
 
-        p.text-warning.
-          <strong>IMPORTANT!</strong> You can not run any of the ant tasks for the default build.xml
-          file without first creating the <code>ant_build.properties</code> file.
+			pre: code.bash.
+				ant -f instance-definitions-build.xml set.[TAB]
 
-      .section#compile
-        h2 Compile
-        p Compilation is handled by ant.
+			p.
+				This will set the appropriate meta properties in your
+				<code>ant_build.properties</code> files, <strong>AND</strong>
+				pull the appropriate <code>rrr*properties</code> files
+				from <code>/developer_mdx_config</code> and <code>/[client]_mdx_config</code> into
+				<code>[CODE_ROOT]/src/build</code> and set them to be read-only so you don’t
+				attempt to edit them in the wrong place.
 
-        pre: code.bash ant compile
-      
-        p.
-          See the ant build file for other options.
-          To learn more about these files and how MDX uses them, check the <a href="/chapter/1#config">Config User Guide</a>.
-          This will guide you on how to create and modify the different build files and explain how they’re used in the
-          build process. You can also read the JavaDoc for <code>MdxProperty (/src/com/mandaladesigns/mdx/core/MdxProperties.java)</code>.
+			p.text-warning.
+				<strong>IMPORTANT!</strong> You can not run any of the ant tasks for the default build.xml
+				file without first creating the <code>ant_build.properties</code> file.
 
-    .section#running
-      h1 Running In Development
+		.section#compile
+			h2 Compile
+			p Compilation is handled by ant.
 
-      .section#database
-        h2 Setup the Database
+			pre: code.bash ant compile
 
-        p.
-          In order to run MDX you’ll need to have access to a running instance of
-          the database. Backups are performed nightly and are in a format that are
-          human-readable and easily restorable. To run the database locally, unzip
-          the backup file and load it into MySQL:
+			p.
+				See the ant build file for other options.
+				To learn more about these files and how MDX uses them, check the <a href="/chapter/1#config">Config User Guide</a>.
+				This will guide you on how to create and modify the different build files and explain how they’re used in the
+				build process. You can also read the JavaDoc for <code>MdxProperty (/src/com/mandaladesigns/mdx/core/MdxProperties.java)</code>.
 
-        pre: code.bash.
-          unzip [backup file.zip]
-          cd backup/mysql
-          mysql -u root--p < [backup file.bak]
+	.section#running
+		h1 Running In Development
 
-      .section#tomcat
-        h2 Start Tomcat
+		.section#database
+			h2 Setup the Database
 
-        pre: code.bash ant start.tomcat
+			p.
+				In order to run MDX you’ll need to have access to a running instance of
+				the database. Backups are performed nightly and are in a format that are
+				human-readable and easily restorable. To run the database locally, unzip
+				the backup file and load it into MySQL:
 
-        p Confirm that tomcat is running by viewing the log file.
+			pre: code.bash.
+				unzip [backup file.zip]
+				cd backup/mysql
+				mysql -u root--p < [backup file.bak]
 
-        pre: code.bash less [CODE ROOT]/tomcat/logs/app.log
-
-        p Confirm that there are no exceptions.
-
-      .section#browser
-        h2 Open MDX In A Browser
-
-        p.
-          Open a browser and go to <code>http://{rrr_webappServerName}:{rrr_tomcatHttpPort}</code>, replacing the
-          variables in curly braces with the values from your build files.
-
-        p.text-warning Congratulations! You have successfully installed and run MDX!
-
-      .section#deploy
-        h1 Deploying MDX
-        p Deploy ceremony involves committing changes, backing up the destination code and database, and finally
-          | deploying the code to the destination server.
-
-        .section#commit-src
-          h2 Commit Changes
-
-          ol
-            li <strong>New Version</strong>: increment <code>VersionEnum</code>.
-            li <strong>Update release-notes.txt</strong> with a summary of the changes.
-            li <strong>Commit</strong>: include a one-line summary along with a comment for every file changed.
-            li <strong>Merge</strong> your dev branch to <code>stable</code>.
-            li Tag the commit. You’ll want to create a tag with the same exact code
-              | as done in the deploy script. You’ll also want to create a separate
-              | tag for each deploy target. For example:
-            li <strong>Tag Src</strong>: create a git tag corresponding to the <code>VersionEnum</code>.
-            li <strong>Tag Deploy</strong>: create a git tag named according to the client deploy.
-
-          pre: code.bash.
-            git tag v3.6.4ga
-            git tag shambhala-tomcat1-production-v3.6.4ga
-
-            # Push to code to origin
-            git push origin stable
-
-    :markdown
-            #_ Back up the database. Go to the production database server and run
-            the backup commands for the environments you wish to backup:
-
-            `$ sudo /backup/bin/innertraditions.pl`
-
-            #_ Back up the target files. Go to the production app server and tar
-            up the entire directory tree:
-
-            `$ tar -czvf archive/iti-2012.03.28.tgz innertraditions-tomcat1-production/`
-
-            #_ Set instance to appropriate server. *You should always deploy to a
-            staging server first.*
-
-            `$ ant -f instance-definitions-build.xml set.[client]-[machine]-[instance]`
-
-            #_ Run the ant dist task which will create a copy of the code with the
-            proper paths/properties.
-
-            `$ ant dist`
-
-            #_ Run the deploy script
-
-            `$ sh [CODE ROOT]/../dist/[client]-[machine]-[instance]/scripts/deploy.sh`
-
-            The deploy relies on rsync over ssh. You will need to set up
-            passwordless logins to each of the servers you wish to deploy to.
-
-            NB: You may wish to deploy with the `--code-only` tag, which will stop
-            the tomcat server, but won’t restart it. This is useful for making db
-            changes before the app comes up.
-
-    :markdown
-
-            Disaster Recovery Checklist
-            ==============================
-
-            Use this worksheet to record the location of the file and configuration
-            settings required to restore MDX in the event of a disaster.
-
-            table{border:1px solid black}.
-            |*.Name|*.Description|_.Location|
-            |MDX Source Code|Java files and properties required to run MDX|A full
-            copy of the git source repositories are updated daily via cron and are
-            stored on the production webserver at `~/backup/src`|
-            |Database Backups|Recent database dumps|14 days of database backups will
-            be stored on the production webserver at `~/backup/db`|
-            |Client Assets|Covers, catalogs, extra website files that are owned by
-            the client||
-
-            # Cron Configuration
-
-            ## Inner Traditions Cron
-
-            bash
-             0 1 * * *
-            ~/innertraditions-tomcat1-production/scripts/cron/crontab-refresh-cache.sh
-            0 6 * * *~/innertraditions-tomcat1-production/scripts/cron/crontab-batch.sh
-            25 * * * *
-            ~/innertraditions-tomcat1-production/scripts/cron/crontab-database-cleanup.sh >/dev/null 2>&1
-            1 30 * * *~/innertraditions-tomcat1-production/scripts/cron/git-fetch-cron.sh
-
-            ## Shambhala Cron
-
-            bash
-             # run the ingest every 30 minutes
-            0-59/30 * * * *
-            ~/shambhala-tomcat1-production/scripts/cron/crontab-ingest.sh
-
-            # Import images every hour
-            0 * * * *~/import_images.sh > ~/import_images.log 2>&1
-
-            # refresh the cache at 5 minutes past the hour
-            5 * * * *~/shambhala-tomcat1-production/scripts/cron/crontab-refresh-cache.sh
-
-            1.  refresh the source repository every day
-                1 35 * * *
-                ~/shambhala-tomcat1-production/scripts/cron/git-fetch-cron.sh
+		.section#tomcat
+			h2 Start Tomcat
+
+			pre: code.bash ant start.tomcat
+
+			p Confirm that tomcat is running by viewing the log file.
+
+			pre: code.bash less [CODE ROOT]/tomcat/logs/app.log
+
+			p Confirm that there are no exceptions.
+
+		.section#browser
+			h2 Open MDX In A Browser
+
+			p.
+				Open a browser and go to <code>http://{rrr_webappServerName}:{rrr_tomcatHttpPort}</code>, replacing the
+				variables in curly braces with the values from your build files.
+
+			p.text-warning Congratulations! You have successfully installed and run MDX!
+
+	.section#deploy
+		h1 Deploying MDX
+		p Deploy ceremony involves committing changes, backing up the destination code and database, and finally
+			| deploying the code to the destination server.
+
+		.section#commit
+			h2 Commit Changes
+
+			ol
+				li <strong>New Version</strong>: increment <code>VersionEnum</code>.
+				li <strong>Update release-notes.txt</strong> with a summary of the changes.
+				li <strong>Commit</strong>: include a one-line summary along with a comment for every file changed.
+				li <strong>Merge</strong> your dev branch to <code>stable</code>.
+				li Tag the commit. You’ll want to create a tag with the same exact code
+					| as done in the deploy script. You’ll also want to create a separate
+					| tag for each deploy target. For example:
+				li <strong>Tag Src</strong>: create a git tag corresponding to the <code>VersionEnum</code>.
+				li <strong>Tag Deploy</strong>: create a git tag named according to the client deploy.
+
+			pre: code.bash.
+				git tag v3.6.4ga # Use the correct version
+				git tag shambhala-tomcat1-production-v3.6.4ga # User the client build instance + version
+
+				# Push to code & tags to origin
+				git push origin stable
+				git push origin v3.6.4ga
+				git push origin shambhala-tomcat1-production-v3.6.4ga
+
+		.section#backup
+			h2 Backup
+			h3 Backup Database
+
+				pre: code.bash.
+					ssh {database-server} # use actual database server name
+					sudo /backup/bin/{client}.pl # use actual client name
+
+			h3 Backup Runtime
+
+				pre: code.bash.
+					ssh {deploy-server} # use deploy server
+					tar -czvf archive/{client}-{YYYMMDD}-{HHMMSS).tgz {client}-tomcat1-production/ # use client name, and current date
+
+		.section#dist-deploy
+			h2 Dist & Deploy
+
+			p.
+				The deploy relies on rsync over ssh. You will need to set up
+				passwordless logins to each of the servers you wish to deploy to.
+
+			p.
+				Note: You may wish to deploy with the `--code-only` tag, which will stop
+				the tomcat server, but won’t restart it. This is useful for making db
+				changes before the app comes up.
+
+			p Set the deploy instance with ant and then create the dist.
+
+			pre: code.bash.
+				ant -f instance-definitions-build.xml set.[client]-[machine]-[instance]
+				ant dist # creates the distribution files
+				sh build/dist/{client}-{machine}-{instance}/scripts/deploy.sh # transfers files to dest and restarts server
+
+	.section#disaster
+		h1 Disaster Recovery Files
+
+		p.
+			Use this worksheet to record the location of the file and configuration
+			settings required to restore MDX in the event of a disaster.
+
+		table.table.table-bordered.table-condensed
+			thead
+				tr
+					th Name
+					th Description
+					th Location
+			tbody
+				tr
+					td MDX Source Code
+					td Java files and properties required to run MDX
+					td.
+						A full copy of the git source repositories are updated daily via cron and are
+						stored on the production webserver at <code>~/backup/src</code>
+				tr
+					td Database Backups
+					td Recent database dumps
+					td.
+						14 days of database backups will be stored on the production webserver at <code>~/backup/db</code>
+				tr
+					td Client Assets
+					td Covers, catalogs, extra website files that are owned by each client
+					td Client owned
+
+	.section#cron
+		h1 Cron Configuration
+
+		p Cron jobs are run from each client's user account.
