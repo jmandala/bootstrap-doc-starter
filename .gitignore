@@ -16,3 +16,4 @@ npm-debug.log
 node_modules
 
 app.json
+views

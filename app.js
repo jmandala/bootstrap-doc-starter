@@ -7,7 +7,8 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , jsonfile = require('jsonfile')
-    , fs = require('fs');
+    , fs = require('fs')
+    , ncp = require('ncp').ncp;
 
 var app = express();
 
@@ -31,6 +32,17 @@ fs.exists('./app.json', function (exists) {
     readConfig('./app.json');
 });
 
+fs.exists('./views', function(exists) {
+    if (!exists) {
+        ncp('./template.views', './views', function(err) {
+            if (err) {
+                return console.error(err);
+            }
+            console.log('Built views from template');
+        });
+    }
+});
+
 
 // development only
 if ('development' == app.get('env')) {
@@ -43,6 +55,8 @@ app.get('/chapter/:id', routes.chapters);
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
+
+// custom functions
 
 
 function readConfig(path) {
