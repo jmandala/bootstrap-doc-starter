@@ -4,3 +4,21 @@ body > .navbar .brand {
 .section {
   padding-top: 40px;
 }
+ul.sub-nav {
+  margin: 0;
+}
+.sub-nav > li > a {
+  border: 1px solid #e5e5e5;
+  display: block;
+  display: block;
+  margin: 0 0 -1px;
+  padding: 8px 14px;
+  border: 1px solid #e5e5e5;
+}
+.sub-nav>.active>a,
+.sub-nav>.active>a:hover,
+.sub-nav>.active>a:focus {
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+  background-color: #08c;
+}

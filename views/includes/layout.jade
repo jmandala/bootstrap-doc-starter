@@ -1,4 +1,23 @@
 doctype 5
+
+mixin navTitle(name)
+  i.icon-chevron-right
+  != name
+
+mixin navItem(title, href, toggle)
+  - if (toggle)
+    li: a(href=href, data-toggle="collapse", data-target=toggle)
+      mixin navTitle(title)
+      block
+  - else
+    li: a(href=href)
+      mixin navTitle(title)
+      block
+
+mixin subNavItem(title, href, toggle)
+    mixin navItem('&mdash; '+title, href, toggle)
+
+
 html
   head
     title #{projectName} | #{title}
@@ -15,6 +34,8 @@ html
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
     script hljs.initHighlightingOnLoad();
+    script(src='/js/main.js')
+
   body(data-spy="scroll", data-target=".bs-docs-sidebar")
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner

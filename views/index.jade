@@ -2,51 +2,25 @@ extends includes/layout
 
 block sidebar
   ul.nav.nav-list.bs-docs-sidenav.affix
-    li: a(href="#preamble")
-      i.icon-chevron-right
-      | Preamble
-    li: a(href="#conventions")
-      i.icon-chevron-right
-      | Conventions
-    li: a(href="#environment")
-      i.icon-chevron-right
-      | Environment
-    li: a(href="#java")
-      i.icon-chevron-right
-      | &mdash; Java
-    li: a(href="#ant")
-      i.icon-chevron-right
-      | &mdash; Apache Ant
-    li: a(href="#git")
-      i.icon-chevron-right
-      | &mdash; Git
-    li: a(href="#envpath")
-      i.icon-chevron-right
-      | &mdash; Environment Path
-    li: a(href="#mysql")
-      i.icon-chevron-right
-      | &mdash; Mysql Path
-    li: a(href="#keystore")
-      i.icon-chevron-right
-      | &mdash; Keystore
-    li: a(href="#building")
-      i.icon-chevron-right
-      | Building MDX
-    li: a(href="#cloning")
-      i.icon-chevron-right
-      | &mdash; Get Source Code
-    li: a(href="#properties")
-      i.icon-chevron-right
-      | &mdash; Setting Properties
-    li: a(href="#compile")
-      i.icon-chevron-right
-      | &mdash; Compiling
-    li: a(href="#running")
-      i.icon-chevron-right
-      | Running In Development
-    li: a(href="#database")
-      i.icon-chevron-right
-      | &mdash; Databse Setup
+    +navItem("Conventions", "#conventions")
+    +navItem("Environment", "#env",  ".env-collapse")
+      ul.sub-nav.env-collapse.collapse
+        +subNavItem("Java", "#java")
+        +subNavItem("Ant", "#ant")
+        +subNavItem("Git", "#git")
+        +subNavItem("Environment Path", "#envpath")
+        +subNavItem("Mysql", "#mysql")
+        +subNavItem("Keystore", "#keystore")
+    +navItem("Building MDX", "#building",  ".build-collapse")
+      ul.sub-nav.build-collapse.collapse
+        +subNavItem("Get The Course", "#cloning")
+        +subNavItem("Setting Properties", "#properties")
+        +subNavItem("Compiling", "#compile")
+    +navItem("Running In Development", "#running", ".run-collapse")
+      ul.sub-nav.run-collapse.collapse
+        +subNavItem("Database Setup", "#database")
+        +subNavItem("Tomcat", "#tomcat")
+        +subNavItem("Open In Browser", "#browser")
 
 block content
   .hero-unit
@@ -75,7 +49,7 @@ block content
             td.text-info [CONFIG_ROOT]
             td The parent directory of where the client and developer configurations are checked out.
 
-  .section#environment
+  .section#env
     h1 Environment
     p Configure the pre-requisites for building #{projectName}
 
@@ -262,47 +236,42 @@ block content
 
         p Confirm that there are no exceptions.
 
+      .section#browser
+        h2 Open MDX In A Browser
+
+        p.
+          Open a browser and go to <code>http://{rrr_webappServerName}:{rrr_tomcatHttpPort}</code>, replacing the
+          variables in curly braces with the values from your build files.
+
+        p.text-warning Congratulations! You have successfully installed and run MDX!
+
+      .section#deploy
+        h1 Deploying MDX
+        p Deploy ceremony involves committing changes, backing up the destination code and database, and finally
+          | deploying the code to the destination server.
+
+        .section#commit-src
+          h2 Commit Changes
+
+          ol
+            li <strong>New Version</strong>: increment <code>VersionEnum</code>.
+            li <strong>Update release-notes.txt</strong> with a summary of the changes.
+            li <strong>Commit</strong>: include a one-line summary along with a comment for every file changed.
+            li <strong>Merge</strong> your dev branch to <code>stable</code>.
+            li Tag the commit. You’ll want to create a tag with the same exact code
+              | as done in the deploy script. You’ll also want to create a separate
+              | tag for each deploy target. For example:
+            li <strong>Tag Src</strong>: create a git tag corresponding to the <code>VersionEnum</code>.
+            li <strong>Tag Deploy</strong>: create a git tag named according to the client deploy.
+
+          pre: code.bash.
+            git tag v3.6.4ga
+            git tag shambhala-tomcat1-production-v3.6.4ga
+
+            # Push to code to origin
+            git push origin stable
 
     :markdown
-
-
-
-
-            Open the site in a browser
-            -----------------------------
-
-            View the app in a browser by browsing to whatever value you used for
-            “rrr_webappServerName” and “rrr_tomcatHttpPort” in your build files.
-
-            Congratulations! You have successfully installed and run MDX!
-
-            Deploying MDX
-            ======================
-
-            To deploy the code, you’ll need to perform the following steps:
-
-
-            1.  Update the release-notes.txt with a summary of the changes made,
-                creating a new tag, if necessary.
-            2.  Confirm you’ve added a VersionEnum that matches the version in the
-                release-notes.txt.
-            3.  Commit the code. There should be a one-line summary of the commit,
-                along with a comment for every file changed. The deploy script will
-                prevent you from deploying code that is not committed, even to
-                stage.
-            4.  Merge the changes (you were working on a branch, correct?) back into
-                stable.
-            5.  Tag the commit. You’ll want to create a tag with the same exact code
-                as done in the deploy script. You’ll also want to create a separate
-                tag for each deploy target. For example:
-
-            `$ git tag v3.6.4ga`
-            `$ git tag shambhala-tomcat1-production-v3.6.4ga`
-
-            #_ Push to code to origin:
-
-            `$ git push origin stable`
-
             #_ Back up the database. Go to the production database server and run
             the backup commands for the environments you wish to backup:
 
@@ -333,6 +302,8 @@ block content
             NB: You may wish to deploy with the `--code-only` tag, which will stop
             the tomcat server, but won’t restart it. This is useful for making db
             changes before the app comes up.
+
+    :markdown
 
             Disaster Recovery Checklist
             ==============================
