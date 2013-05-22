@@ -1,14 +1,14 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path')
-    , jsonfile = require('jsonfile');
+    , routes = require('./routes')
+    , user = require('./routes/user')
+    , http = require('http')
+    , path = require('path')
+    , jsonfile = require('jsonfile')
+    , fs = require('fs');
 
 var app = express();
 
@@ -25,20 +25,32 @@ app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // configure documentation
-jsonfile.readFile('./app.json', function(err, obj) {
-    console.log(err);
-    console.log(obj);
-    app.locals(obj);
+fs.exists('./app.json', function (exists) {
+    if (!exists) {
+        fs.createReadStream('./app.json.sample').pipe(fs.createWriteStream('./app.json'));
+    }
+    readConfig('./app.json');
+
 });
+
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
 }
 
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+function readConfig(path) {
+    jsonfile.readFile(path, function (err, obj) {
+        console.log(err);
+        console.log(obj);
+        app.locals(obj);
+    });
+}
