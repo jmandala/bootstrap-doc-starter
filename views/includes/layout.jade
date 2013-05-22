@@ -2,6 +2,8 @@ doctype 5
 html
   head
     title #{projectName} | #{title}
+    link(rel='stylesheet', href='//yandex.st/highlightjs/7.3/styles/default.min.css')
+
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/bs-docs.css')
     link(rel='stylesheet', href='/stylesheets/pre-responsive-style.css')
@@ -9,8 +11,10 @@ html
     link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+    script(src='//yandex.st/highlightjs/7.3/highlight.min.js')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
+    script hljs.initHighlightingOnLoad();
   body(data-spy="scroll", data-target=".bs-docs-sidebar")
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner

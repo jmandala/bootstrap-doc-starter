@@ -11,6 +11,7 @@
         "stylus": "*",
         "jsonfile": "*",
         "ncp": "*",
-        "markdown":"*"
+        "markdown":"*",
+        "highlight.js":"*"
     }
 }

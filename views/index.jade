@@ -38,6 +38,15 @@ block sidebar
     li: a(href="#properties")
       i.icon-chevron-right
       | &mdash; Setting Properties
+    li: a(href="#compile")
+      i.icon-chevron-right
+      | &mdash; Compiling
+    li: a(href="#running")
+      i.icon-chevron-right
+      | Running In Development
+    li: a(href="#database")
+      i.icon-chevron-right
+      | &mdash; Databse Setup
 
 block content
   .hero-unit
@@ -81,7 +90,7 @@ block content
         li Follow the links for <strong>downloading the Java SE JDK</strong>, agree to licensing and download.
         li Set the environment variable <code>JAVA_HOME</code> to the path where you installed the JDK.
 
-      pre.
+      pre: code.bash.
         set | grep JAVA_HOME
         JAVA_HOME=/usr/java/jdk
 
@@ -94,7 +103,7 @@ block content
 
       p Confirm Java is running the correct version
 
-      pre.
+      pre: code.bash.
         $JAVA_HOME/bin/java -version
         java version “1.6.0_14”
         Java SE Runtime Environment
@@ -108,7 +117,8 @@ block content
         li Unzip the file and place it wherever is appropriate on your system.
         li Set the environment variable ANT_HOME to the path where you unzipped ant:
 
-      pre.
+
+      pre: code.bash.
         set | grep ANT_HOME
         ANT_HOME=/usr/local/ant
 
@@ -116,7 +126,7 @@ block content
 
       h3 Verify Ant Install & Version
 
-      pre.
+      pre: code.bash.
         $ANT_HOME/bin/ant -version
         Apache Ant version 1.8.2 compiled on December 20 2010
 
@@ -131,7 +141,7 @@ block content
 
       p Add <code>$JAVA_HOME/bin</code> and <code>$ANT_HOME/bin</code> to your path. For Linux do this:
 
-      pre
+      pre: code.bash.
         echo "export PATH=$JAVA_HOME/bin:$ANT_HOME/bin:$PATH" >> ~/.bash_profile && . ~/.bash_profile
 
     .section#mysql
@@ -149,7 +159,7 @@ block content
         login passwords). In order for tomcat to communicate via https, you need
         to have a keystore installed on the machine.
 
-      pre
+      pre: code.bash.
         $JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA -keystore /path/to/keystore
 
       p For more details, please see the
@@ -166,7 +176,7 @@ block content
         If this is the first time you are downloading the source code, clone the
         git repositories using the following commands.
 
-      pre.
+      pre: code.bash.
         git clone code.mandaladesigns.com:/repos/mandala/mdx_pub.git
         mkdir mdx_config
         cd mdx_config
@@ -178,10 +188,10 @@ block content
       p When you are done, you should have a directory structure that looks something like the following:
 
 
-      pre.
+      pre: code.bash.
         mdx_config
-        \-- developer_mdx_config
-        \-- [client]_mdx_config
+        \- developer_mdx_config
+        \- [client]_mdx_config
         mdx_pub
 
       p.text-info.
@@ -195,10 +205,9 @@ block content
           MDX relies on three special meta properties, <code>mmm_projectName, mmm_machineName, mmm_instanceName</code>,
           to determine which config files will be used when the src is built. These properties are stored in
           a generated file called _ant_build.properties_ located at /src/build.
-    
         |  There is an ant task to change these values to match the project you wish to run.
 
-        pre.
+        pre: code.bash.
           ant -f instance-definitions-build.xml set.[TAB]
       
         p.
@@ -213,164 +222,159 @@ block content
           <strong>IMPORTANT!</strong> You can not run any of the ant tasks for the default build.xml
           file without first creating the <code>ant_build.properties</code> file.
 
+      .section#compile
+        h2 Compile
+        p Compilation is handled by ant.
 
-  :markdown
-
-
-      ## Compile
-      To compile the code, call the compile task on the default build file:
-
-      bash
-      $ ant compile
+        pre: code.bash ant compile
       
+        p.
+          See the ant build file for other options.
+          To learn more about these files and how MDX uses them, check the <a href="/chapter/1#config">Config User Guide</a>.
+          This will guide you on how to create and modify the different build files and explain how they’re used in the
+          build process. You can also read the JavaDoc for <code>MdxProperty (/src/com/mandaladesigns/mdx/core/MdxProperties.java)</code>.
 
-      See the ant build file for other options.
+    .section#running
+      h1 Running In Development
 
-      To learn more about these files and how MDX uses them, check the  [Config User Guide](config.html). This will guide you on how to create and modify the different build files and explain how they’re used in the build process.
+      .section#database
+        h2 Setup the Database
 
-      You can also ready the JavaDoc for `MdxProperty` /src/com/mandaladesigns/mdx/core/MdxProperties.java.
+        p.
+          In order to run MDX you’ll need to have access to a running instance of
+          the database. Backups are performed nightly and are in a format that are
+          human-readable and easily restorable. To run the database locally, unzip
+          the backup file and load it into MySQL:
 
-      Running In Development
-      ============================
+        pre: code.bash.
+          unzip [backup file.zip]
+          cd backup/mysql
+          mysql -u root--p < [backup file.bak]
 
-      Setup the Database
-      ---------------------
+      .section#tomcat
+        h2 Start Tomcat
 
-      In order to run MDX you’ll need to have access to a running instance of
-      the database. Backups are performed nightly and are in a format that are
-      human-readable and easily restorable. To run the database locally, unzip
-      the backup file and load it into MySQL:
+        pre: code.bash ant start.tomcat
 
-      bash
-       $ unzip [backup file.zip]
-      $ cd backup/mysql
-      $ mysql -u root--p < [backup file.bak]
-      
+        p Confirm that tomcat is running by viewing the log file.
 
-      Start Tomcat
-      ---------------
+        pre: code.bash less [CODE ROOT]/tomcat/logs/app.log
 
-      Start tomcat by calling the startup script:
-
-      bash
-      $ ant start.tomcat
-      
-
-      Confirm that tomcat is running by viewing the log file.
-
-      bash
-      $ less [CODE ROOT]/tomcat/logs/app.log
-      
-
-      Confirm that there are no exceptions.
-
-      Open the site in a browser
-      -----------------------------
-
-      View the app in a browser by browsing to whatever value you used for
-      “rrr_webappServerName” and “rrr_tomcatHttpPort” in your build files.
-
-      Congratulations! You have successfully installed and run MDX!
-
-      Deploying MDX
-      ======================
-
-      To deploy the code, you’ll need to perform the following steps:
+        p Confirm that there are no exceptions.
 
 
-      1.  Update the release-notes.txt with a summary of the changes made,
-          creating a new tag, if necessary.
-      2.  Confirm you’ve added a VersionEnum that matches the version in the
-          release-notes.txt.
-      3.  Commit the code. There should be a one-line summary of the commit,
-          along with a comment for every file changed. The deploy script will
-          prevent you from deploying code that is not committed, even to
-          stage.
-      4.  Merge the changes (you were working on a branch, correct?) back into
-          stable.
-      5.  Tag the commit. You’ll want to create a tag with the same exact code
-          as done in the deploy script. You’ll also want to create a separate
-          tag for each deploy target. For example:
+    :markdown
 
-      `$ git tag v3.6.4ga`
-      `$ git tag shambhala-tomcat1-production-v3.6.4ga`
 
-      #_ Push to code to origin:
 
-      `$ git push origin stable`
 
-      #_ Back up the database. Go to the production database server and run
-      the backup commands for the environments you wish to backup:
+            Open the site in a browser
+            -----------------------------
 
-      `$ sudo /backup/bin/innertraditions.pl`
+            View the app in a browser by browsing to whatever value you used for
+            “rrr_webappServerName” and “rrr_tomcatHttpPort” in your build files.
 
-      #_ Back up the target files. Go to the production app server and tar
-      up the entire directory tree:
+            Congratulations! You have successfully installed and run MDX!
 
-      `$ tar -czvf archive/iti-2012.03.28.tgz innertraditions-tomcat1-production/`
+            Deploying MDX
+            ======================
 
-      #_ Set instance to appropriate server. *You should always deploy to a
-      staging server first.*
+            To deploy the code, you’ll need to perform the following steps:
 
-      `$ ant -f instance-definitions-build.xml set.[client]-[machine]-[instance]`
 
-      #_ Run the ant dist task which will create a copy of the code with the
-      proper paths/properties.
+            1.  Update the release-notes.txt with a summary of the changes made,
+                creating a new tag, if necessary.
+            2.  Confirm you’ve added a VersionEnum that matches the version in the
+                release-notes.txt.
+            3.  Commit the code. There should be a one-line summary of the commit,
+                along with a comment for every file changed. The deploy script will
+                prevent you from deploying code that is not committed, even to
+                stage.
+            4.  Merge the changes (you were working on a branch, correct?) back into
+                stable.
+            5.  Tag the commit. You’ll want to create a tag with the same exact code
+                as done in the deploy script. You’ll also want to create a separate
+                tag for each deploy target. For example:
 
-      `$ ant dist`
+            `$ git tag v3.6.4ga`
+            `$ git tag shambhala-tomcat1-production-v3.6.4ga`
 
-      #_ Run the deploy script
+            #_ Push to code to origin:
 
-      `$ sh [CODE ROOT]/../dist/[client]-[machine]-[instance]/scripts/deploy.sh`
+            `$ git push origin stable`
 
-      The deploy relies on rsync over ssh. You will need to set up
-      passwordless logins to each of the servers you wish to deploy to.
+            #_ Back up the database. Go to the production database server and run
+            the backup commands for the environments you wish to backup:
 
-      NB: You may wish to deploy with the `--code-only` tag, which will stop
-      the tomcat server, but won’t restart it. This is useful for making db
-      changes before the app comes up.
+            `$ sudo /backup/bin/innertraditions.pl`
 
-      Disaster Recovery Checklist
-      ==============================
+            #_ Back up the target files. Go to the production app server and tar
+            up the entire directory tree:
 
-      Use this worksheet to record the location of the file and configuration
-      settings required to restore MDX in the event of a disaster.
+            `$ tar -czvf archive/iti-2012.03.28.tgz innertraditions-tomcat1-production/`
 
-      table{border:1px solid black}.
-      |*.Name|*.Description|_.Location|
-      |MDX Source Code|Java files and properties required to run MDX|A full
-      copy of the git source repositories are updated daily via cron and are
-      stored on the production webserver at `~/backup/src`|
-      |Database Backups|Recent database dumps|14 days of database backups will
-      be stored on the production webserver at `~/backup/db`|
-      |Client Assets|Covers, catalogs, extra website files that are owned by
-      the client||
+            #_ Set instance to appropriate server. *You should always deploy to a
+            staging server first.*
 
-      # Cron Configuration
+            `$ ant -f instance-definitions-build.xml set.[client]-[machine]-[instance]`
 
-      ## Inner Traditions Cron
+            #_ Run the ant dist task which will create a copy of the code with the
+            proper paths/properties.
 
-      bash
-       0 1 * * *
-      ~/innertraditions-tomcat1-production/scripts/cron/crontab-refresh-cache.sh
-      0 6 * * *~/innertraditions-tomcat1-production/scripts/cron/crontab-batch.sh
-      25 * * * *
-      ~/innertraditions-tomcat1-production/scripts/cron/crontab-database-cleanup.sh >/dev/null 2>&1
-      1 30 * * *~/innertraditions-tomcat1-production/scripts/cron/git-fetch-cron.sh
+            `$ ant dist`
 
-      ## Shambhala Cron
+            #_ Run the deploy script
 
-      bash
-       # run the ingest every 30 minutes
-      0-59/30 * * * *
-      ~/shambhala-tomcat1-production/scripts/cron/crontab-ingest.sh
+            `$ sh [CODE ROOT]/../dist/[client]-[machine]-[instance]/scripts/deploy.sh`
 
-      # Import images every hour
-      0 * * * *~/import_images.sh > ~/import_images.log 2>&1
+            The deploy relies on rsync over ssh. You will need to set up
+            passwordless logins to each of the servers you wish to deploy to.
 
-      # refresh the cache at 5 minutes past the hour
-      5 * * * *~/shambhala-tomcat1-production/scripts/cron/crontab-refresh-cache.sh
+            NB: You may wish to deploy with the `--code-only` tag, which will stop
+            the tomcat server, but won’t restart it. This is useful for making db
+            changes before the app comes up.
 
-      1.  refresh the source repository every day
-          1 35 * * *
-          ~/shambhala-tomcat1-production/scripts/cron/git-fetch-cron.sh
+            Disaster Recovery Checklist
+            ==============================
+
+            Use this worksheet to record the location of the file and configuration
+            settings required to restore MDX in the event of a disaster.
+
+            table{border:1px solid black}.
+            |*.Name|*.Description|_.Location|
+            |MDX Source Code|Java files and properties required to run MDX|A full
+            copy of the git source repositories are updated daily via cron and are
+            stored on the production webserver at `~/backup/src`|
+            |Database Backups|Recent database dumps|14 days of database backups will
+            be stored on the production webserver at `~/backup/db`|
+            |Client Assets|Covers, catalogs, extra website files that are owned by
+            the client||
+
+            # Cron Configuration
+
+            ## Inner Traditions Cron
+
+            bash
+             0 1 * * *
+            ~/innertraditions-tomcat1-production/scripts/cron/crontab-refresh-cache.sh
+            0 6 * * *~/innertraditions-tomcat1-production/scripts/cron/crontab-batch.sh
+            25 * * * *
+            ~/innertraditions-tomcat1-production/scripts/cron/crontab-database-cleanup.sh >/dev/null 2>&1
+            1 30 * * *~/innertraditions-tomcat1-production/scripts/cron/git-fetch-cron.sh
+
+            ## Shambhala Cron
+
+            bash
+             # run the ingest every 30 minutes
+            0-59/30 * * * *
+            ~/shambhala-tomcat1-production/scripts/cron/crontab-ingest.sh
+
+            # Import images every hour
+            0 * * * *~/import_images.sh > ~/import_images.log 2>&1
+
+            # refresh the cache at 5 minutes past the hour
+            5 * * * *~/shambhala-tomcat1-production/scripts/cron/crontab-refresh-cache.sh
+
+            1.  refresh the source repository every day
+                1 35 * * *
+                ~/shambhala-tomcat1-production/scripts/cron/git-fetch-cron.sh
