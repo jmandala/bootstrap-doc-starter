@@ -8,5 +8,5 @@ exports.index = function(req, res){
 };
 
 exports.chapters = function(req, res){
-    res.render('chapters/' + req.params.id, { title: 'Chapter '+req.params.id });
+    res.render('chapters/' + req.params.id, { title: req.params.id });
 };

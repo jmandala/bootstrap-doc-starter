@@ -1,59 +1,63 @@
 doctype 5
 
 mixin navTitle(name)
-  i.icon-chevron-right
-  != name
+	i.icon-chevron-right
+	!= name
 
 mixin navItem(title, href, toggle)
-  - if (toggle)
-    li: a(href=href, data-toggle="collapse", data-target=toggle)
-      mixin navTitle(title)
-      block
-  - else
-    li: a(href=href)
-      mixin navTitle(title)
-      block
+	- if (toggle)
+		li: a(href=href, data-toggle="collapse", data-target=toggle)
+			mixin navTitle(title)
+			block
+	- else
+		li: a(href=href)
+			mixin navTitle(title)
+			block
 
 mixin subNavItem(title, href, toggle)
-    mixin navItem('&mdash; '+title, href, toggle)
+		mixin navItem('&mdash; '+title, href, toggle)
 
 
 html
-  head
-    title #{projectName} | #{title}
-    link(rel='stylesheet', href='//yandex.st/highlightjs/7.3/styles/default.min.css')
+	head
+		title #{projectName} | #{title}
+		link(rel='stylesheet', href='//yandex.st/highlightjs/7.3/styles/default.min.css')
 
-    link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/bs-docs.css')
-    link(rel='stylesheet', href='/stylesheets/pre-responsive-style.css')
+		link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/stylesheets/bs-docs.css')
+		link(rel='stylesheet', href='/stylesheets/pre-responsive-style.css')
 
-    link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='//yandex.st/highlightjs/7.3/highlight.min.js')
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
-    script(src='/bootstrap/js/bootstrap.min.js')
-    script hljs.initHighlightingOnLoad();
-    script(src='/js/main.js')
+		link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
+		link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		script(src='//yandex.st/highlightjs/7.3/highlight.min.js')
+		script(src='//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+		script(src='/bootstrap/js/bootstrap.min.js')
+		script hljs.initHighlightingOnLoad();
+		script(src='/js/main.js')
 
-  body(data-spy="scroll", data-target=".bs-docs-sidebar")
-    .navbar.navbar-inverse.navbar-fixed-top
-      .navbar-inner
-        .container
-          button(type="button", class="btn btn-navbar", data-toggle="collapse", data-target=".nav-collapse")
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href="#")
-            i(class="icon-book icon-white")
-            &nbsp;#{projectName}
-          .nav-collapse.collapse
-            include top-nav
+	body(data-spy="scroll", data-target=".bs-docs-sidebar")
+		.navbar.navbar-inverse.navbar-fixed-top
+			.navbar-inner
+				.container
+					button(type="button", class="btn btn-navbar", data-toggle="collapse", data-target=".nav-collapse")
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.brand(href="#")
+						i(class="icon-book icon-white")
+						&nbsp;#{projectName}
+					.nav-collapse.collapse
+						include top-nav
 
-    .container
-      .row
-        .span3.bs-docs-sidebar
-          block sidebar
-        .span9
-          block content
+		.container
+			.row
+				.span3.bs-docs-sidebar
+					block sidebar
+				.span9
+					block content
+
+					footer#footer
+						p MDX Software &copy; Mandala Designs LLC, Contact <a href="mailto:josh@mandala-designs.com">Joshua Jacobs</a>, (617) 297-2358.
+
 
