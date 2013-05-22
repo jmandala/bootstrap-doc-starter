@@ -4,7 +4,6 @@
 
 var express = require('express')
     , routes = require('./routes')
-    , user = require('./routes/user')
     , http = require('http')
     , path = require('path')
     , jsonfile = require('jsonfile')
@@ -30,7 +29,6 @@ fs.exists('./app.json', function (exists) {
         fs.createReadStream('./app.json.sample').pipe(fs.createWriteStream('./app.json'));
     }
     readConfig('./app.json');
-
 });
 
 
@@ -40,7 +38,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/chapter/:id', routes.chapters);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
@@ -49,8 +47,6 @@ http.createServer(app).listen(app.get('port'), function () {
 
 function readConfig(path) {
     jsonfile.readFile(path, function (err, obj) {
-        console.log(err);
-        console.log(obj);
         app.locals(obj);
     });
 }
