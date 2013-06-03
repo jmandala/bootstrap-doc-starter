@@ -1,0 +1,18 @@
+extends ../includes/layout
+
+block sidebar
+	ul.nav.nav-list.bs-docs-sidenav.affix
+		+navItem("Introduction", "#intro")
+		+navItem("URL Rewrite", "#url-rewrite")
+
+block content
+	.section#into
+		h1 Introduction To The Frontend
+
+		p.
+			MDX uses Struts 1.3, JSP (with JSTL), and Tiles to manage the frontend display.
+
+	.section#url-rewrite
+		h1 URL Rewrite
+
+		p Url rewriting is provided by tuckey.org's urlrewrite library. Configure it in <code>urlrewrite.xml</code>.

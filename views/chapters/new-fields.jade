@@ -1,0 +1,33 @@
+extends ../includes/layout
+
+block sidebar
+	ul.nav.nav-list.bs-docs-sidenav.affix
+		+navItem("Introduction", "#intro")
+		+navItem("Checklist", "#checklist")
+
+block content
+	.section#into
+		h1 Adding New Fields
+
+		p.
+			Entities in MDX are managed by Hibernate, plus internally enhanced by <code>ConfigurableFeatureWrapperEnum</code>
+			and <code>ListElementEnum</code> classes. This document explains how to add new fields to an existing entity. It is very much a work in progress, where we will be adding more documentation as new features are developed.
+
+	.section#checklist
+		h1 New Field Checklist
+
+		p.
+			Most entity fields are configurable by end-users and can be either enabled or disabled. Disabled fields are hidden from the user interface.
+
+		p Follow these steps to add a new field to an entity within MDX.
+
+		ol
+			li <strong>Create The ListElementEnum</strong>: All configurable fields are enumerated within <code>ListElementEnum</code>. Typically, all you need to do is find a similar field in the same object hierarchy and copy it. It's important to create the Enum in the wrong hierarchy. Be sure the parent is a FIELD tree. Typically the Enum will have a prefix like <code>GENERAL_PRODUCT_FIELD_</code>.
+			li <strong>Update The Management Screen</strong>: Find the JSP that manages the entity display. This will be named <code>{Entity}DisplayFields.jsp</code>.
+			li <strong>Update Field Caption</strong>: Be sure to update the value for <code>captionKey</code> to be relevant to the new field. Create a corresponding entry in <code>application.properties</code>.
+			li <strong>Update the Entity</strong>: Create a new field within the entity itself. Be sure to include the getter and setter.
+			li <strong>Update the View Object</strong>: Create a method in <code>{Entity}View</code> class that returns the property as a string
+			li <strong>Update the Hibernate XML</strong>: Create a new <code>property</code> in the hbm.xml file.
+
+
+SELECT DISTINCT primaryObjectAlias FROM   com.mandaladesigns.mdx.commerce.product.Product as primaryObjectAlias left join primaryObjectAlias.productCategoryAssociations as pca1 left join pca1.category as categories   WHERE 1 = 1 AND ( ( categories.id = :id_0  OR  categories.id = :id_1  OR  categories.id = :id_2  OR  categories.id = :id_3  OR  categories.id = :id_4  OR  categories.id = :id_5  OR  categories.id = :id_6 ) )  ORDER BY primaryObjectAlias.title
