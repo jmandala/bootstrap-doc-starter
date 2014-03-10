@@ -7,7 +7,8 @@ block sidebar
 		+navItem("Buildtime", "#buildtime")
 		+navItem("Runtime", "#runtime")
 		+navItem("New Instance", "#new-instance")
-		+navItem("More Details", "#more")
+		+navItem("ant_build File", "#ant_build")
+		+navItem("Build Properties", "#props")
 
 block content
 	.section#config
@@ -86,7 +87,7 @@ block content
 			# Copy a "set..." target from instance-definitions-build.xml and modify the target name and the @mmm_@ variables.
 			# Go to the [CONFIG_ROOT]/developer_mdx_config/build and copy an instance (and if appropriate, machine) file(s) and modify with values appropriate to your instance.
 
-	.section#more
+	.section#ant_build
 		h1 More About ant_build.properties
 
 		p The first file that is read is ant_build.properties. This file contains the three mmm_ properties which are used to determine which other property files will be read. The three properties are:
@@ -107,3 +108,11 @@ block content
 			li <code>mdx-webapp.properties</code> This file contains the complete list of known application properties.
 				| This file provides default values. As a special validation check, the properties in this file must be equal to
 				|	the MdxProperties.MdxProperty enum.
+
+    .section#props
+        h1 Bulid Properties
+
+        p Application build properties and their defaults are defined in <code>MdxProperties.java</code>. Here's an annotated list.
+
+        ul
+            li <code>
