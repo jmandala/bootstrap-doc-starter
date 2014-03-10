@@ -46,27 +46,27 @@ block content
 	.section#buildtime
 		h1 Buildtime Process
 
-		p	On a clean checkout, <code>@/src/build@</code> is empty. It is the job of the <code>@instance-definitions-build.xml@</code> ant file to fill it. It runs a two-phase process:
+		p	On a clean checkout, <code>/src/build</code> is empty. It is the job of the <code>instance-definitions-build.xml</code> ant file to fill it. It runs a two-phase process:
 
 		ul
-			li It creates <code>@ant_build.properties@</code> from <code>@/config/build/_filter.ant_build.properties@</code> using the values supplied within the ant task definition.
-			li Using <code>@ant_build.properties@</code>, it dynamically determines what files need to be copied from three possible sources:
+			li It creates <code>ant_build.properties</code> from <code>/config/build/_filter.ant_build.properties</code> using the values supplied within the ant task definition.
+			li Using <code>ant_build.properties</code>, it dynamically determines what files need to be copied from three possible sources:
 				ul
-					li <code>@/config/build/@</code> where properties common to all projects are stored.
-					li <code>@[CONFIG_ROOT]/developer_mdx_config/build@</code> where non-production properties relevant to developers (e.g., personal and staging servers) are stored.
-					li <code>@[CONFIG_ROOT]/[client]_mdx_config/build@</code> where production properties are stored.
+					li <code>/config/build/</code> where properties common to all projects are stored.
+					li <code>[CONFIG_ROOT]/developer_mdx_config/build</code> where non-production properties relevant to developers (e.g., personal and staging servers) are stored.
+					li <code>[CONFIG_ROOT]/[client]_mdx_config/build</code> where production properties are stored.
 
-		p Once <code>@/src/build@</code> has the relevant files, then tasks from <code>@build.xml@</code> can be called and use the <code>@rrr_@</code> properties within them to configure the application with appropriate paths, ports, passwords, etc.
+		p Once <code>/src/build</code> has the relevant files, then tasks from <code>build.xml</code> can be called and use the <code>@rrr_@</code> properties within them to configure the application with appropriate paths, ports, passwords, etc.
 
 	.section#runtime
 		h1 What happens at run-time?
 
-		p When the application starts up, <code>@MdxProperties@</code> loads the same files from <code>@/src/build@</code> and validates that all of the appropriate <code>@rrr_@</code> properties are set, checking against its own list, stored in an enum called <code>@MdxProperty@</code>. Currently, there is no easy way of determining if an <code>@rrr_@</code> property is used just for build-time or run-time or both.
+		p When the application starts up, <code>MdxProperties</code> loads the same files from <code>/src/build</code> and validates that all of the appropriate <code>@rrr_@</code> properties are set, checking against its own list, stored in an enum called <code>MdxProperty</code>. Currently, there is no easy way of determining if an <code>@rrr_@</code> property is used just for build-time or run-time or both.
 
 	.section#new-instance
 		h1 How To Create A New Instance
 
-		p It is customary and convenient to add a target to the <code>@instance-definitions-build.xml@</code> file that allows for quickly setting the proper ant_build properties. Here's an example target:
+		p It is customary and convenient to add a target to the <code>instance-definitions-build.xml</code> file that allows for quickly setting the proper ant_build properties. Here's an example target:
 
 		pre: code.xml.
 			&lt;target name="set.innertraditions-jgordon-dev"&gt;
@@ -83,8 +83,8 @@ block content
 		p To create your own instance, do the following:
 
 		pre: code.
-			# Copy a "set..." target from @instance-definitions-build.xml@ and modify the target name and the @mmm_@ variables.
-			# Go to the @[CONFIG_ROOT]/developer_mdx_config/build@ and copy an instance (and if appropriate, machine) file(s) and modify with values appropriate to your instance.
+			# Copy a "set..." target from instance-definitions-build.xml and modify the target name and the @mmm_@ variables.
+			# Go to the [CONFIG_ROOT]/developer_mdx_config/build and copy an instance (and if appropriate, machine) file(s) and modify with values appropriate to your instance.
 
 	.section#more
 		h1 More About ant_build.properties
