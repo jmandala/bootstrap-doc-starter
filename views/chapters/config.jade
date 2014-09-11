@@ -1,113 +1,113 @@
 extends ../includes/layout
 
 block sidebar
-	ul.nav.nav-list.bs-docs-sidenav.affix
-		+navItem("Configuration", "#config")
-		+navItem("Files", "#files")
-		+navItem("Buildtime", "#buildtime")
-		+navItem("Runtime", "#runtime")
-		+navItem("New Instance", "#new-instance")
-		+navItem("ant_build File", "#ant_build")
-		+navItem("Build Properties", "#props")
+    ul.nav.nav-list.bs-docs-sidenav.affix
+        +navItem("Configuration", "#config")
+        +navItem("Files", "#files")
+        +navItem("Buildtime", "#buildtime")
+        +navItem("Runtime", "#runtime")
+        +navItem("New Instance", "#new-instance")
+        +navItem("ant_build File", "#ant_build")
+        +navItem("Build Properties", "#props")
 
 block content
-	.section#config
-		h1 Configuration
+    .section#config
+        h1 Configuration
 
-		p.
-			MDX has many different components which require configuration files to operate properly: application server
-			(tomcat), framework (struts), logging (log4j), orm (hibernate), etc. Additionally, MDX has a build system that
-			allows a developer to both run the system locally as well as deploy the system to remote servers. In order to make
-			this work for multiple clients and developers, MDX uses a set of properties stored in Java properties files
-			located in <code>/src/build</code>
+        p.
+            MDX has many different components which require configuration files to operate properly: application server
+            (tomcat), framework (struts), logging (log4j), orm (hibernate), etc. Additionally, MDX has a build system that
+            allows a developer to both run the system locally as well as deploy the system to remote servers. In order to make
+            this work for multiple clients and developers, MDX uses a set of properties stored in Java properties files
+            located in <code>/src/build</code>
 
-		p There are two types of properties found in the properties files located at <code>/src/build</code>.
+        p There are two types of properties found in the properties files located at <code>/src/build</code>.
 
-		ul
-			li <code>mmm_ properties</code> These are meta properties that tell the build system and application where to
-				| find the properties files that contain all the other properties. They only appear in <code>ant_build.properties</code>.
-			li <code>rrr_properties</code> These are properties that are found in a special hierarchy of files that are used
-				| to build and run the application. By confining these properties to just a few files and using ant copy
-				| filtering, we create custom configurations at compile time with template files. These filtered files are
-				| distinguished with the file name prefix <code>_filter.</code>.
+        ul
+            li <code>mmm_ properties</code> These are meta properties that tell the build system and application where to
+                | find the properties files that contain all the other properties. They only appear in <code>ant_build.properties</code>.
+            li <code>rrr_properties</code> These are properties that are found in a special hierarchy of files that are used
+                | to build and run the application. By confining these properties to just a few files and using ant copy
+                | filtering, we create custom configurations at compile time with template files. These filtered files are
+                | distinguished with the file name prefix <code>_filter.</code>.
 
-	.section#files
-		h1 Explanation of /src/build properties files
+    .section#files
+        h1 Explanation of /src/build properties files
 
-		p.
-			MDX uses properties at build-time via ant, and at runtime via <code>MdxProperties</code>
+        p.
+            MDX uses properties at build-time via ant, and at runtime via <code>MdxProperties</code>
 
-		p	While the mechanisms are slightly different, in both cases a similar process is followed:
+        p    While the mechanisms are slightly different, in both cases a similar process is followed:
 
-		ul
-			li <code>ant_build.properties</code> is loaded to determine what the three <code>@mmm_@</code> properties are.
-			li Using those <code>@mmm_@</code> values, the instance, machine, project and mdx-project properties files containing the
-				| <code>@rrr_@</code> properties are loaded. The properties are loaded in such a way that the more specific always overrides the more general: instance > machine > project > mdx-project
+        ul
+            li <code>ant_build.properties</code> is loaded to determine what the three <code>@mmm_@</code> properties are.
+            li Using those <code>@mmm_@</code> values, the instance, machine, project and mdx-project properties files containing the
+                | <code>@rrr_@</code> properties are loaded. The properties are loaded in such a way that the more specific always overrides the more general: instance > machine > project > mdx-project
 
-	.section#buildtime
-		h1 Buildtime Process
+    .section#buildtime
+        h1 Buildtime Process
 
-		p	On a clean checkout, <code>/src/build</code> is empty. It is the job of the <code>instance-definitions-build.xml</code> ant file to fill it. It runs a two-phase process:
+        p    On a clean checkout, <code>/src/build</code> is empty. It is the job of the <code>instance-definitions-build.xml</code> ant file to fill it. It runs a two-phase process:
 
-		ul
-			li It creates <code>ant_build.properties</code> from <code>/config/build/_filter.ant_build.properties</code> using the values supplied within the ant task definition.
-			li Using <code>ant_build.properties</code>, it dynamically determines what files need to be copied from three possible sources:
-				ul
-					li <code>/config/build/</code> where properties common to all projects are stored.
-					li <code>[CONFIG_ROOT]/developer_mdx_config/build</code> where non-production properties relevant to developers (e.g., personal and staging servers) are stored.
-					li <code>[CONFIG_ROOT]/[client]_mdx_config/build</code> where production properties are stored.
+        ul
+            li It creates <code>ant_build.properties</code> from <code>/config/build/_filter.ant_build.properties</code> using the values supplied within the ant task definition.
+            li Using <code>ant_build.properties</code>, it dynamically determines what files need to be copied from three possible sources:
+                ul
+                    li <code>/config/build/</code> where properties common to all projects are stored.
+                    li <code>[CONFIG_ROOT]/developer_mdx_config/build</code> where non-production properties relevant to developers (e.g., personal and staging servers) are stored.
+                    li <code>[CONFIG_ROOT]/[client]_mdx_config/build</code> where production properties are stored.
 
-		p Once <code>/src/build</code> has the relevant files, then tasks from <code>build.xml</code> can be called and use the <code>@rrr_@</code> properties within them to configure the application with appropriate paths, ports, passwords, etc.
+        p Once <code>/src/build</code> has the relevant files, then tasks from <code>build.xml</code> can be called and use the <code>@rrr_@</code> properties within them to configure the application with appropriate paths, ports, passwords, etc.
 
-	.section#runtime
-		h1 What happens at run-time?
+    .section#runtime
+        h1 What happens at run-time?
 
-		p When the application starts up, <code>MdxProperties</code> loads the same files from <code>/src/build</code> and validates that all of the appropriate <code>@rrr_@</code> properties are set, checking against its own list, stored in an enum called <code>MdxProperty</code>. Currently, there is no easy way of determining if an <code>@rrr_@</code> property is used just for build-time or run-time or both.
+        p When the application starts up, <code>MdxProperties</code> loads the same files from <code>/src/build</code> and validates that all of the appropriate <code>@rrr_@</code> properties are set, checking against its own list, stored in an enum called <code>MdxProperty</code>. Currently, there is no easy way of determining if an <code>@rrr_@</code> property is used just for build-time or run-time or both.
 
-	.section#new-instance
-		h1 How To Create A New Instance
+    .section#new-instance
+        h1 How To Create A New Instance
 
-		p It is customary and convenient to add a target to the <code>instance-definitions-build.xml</code> file that allows for quickly setting the proper ant_build properties. Here's an example target:
+        p It is customary and convenient to add a target to the <code>instance-definitions-build.xml</code> file that allows for quickly setting the proper ant_build properties. Here's an example target:
 
-		pre: code.xml.
-			&lt;target name="set.innertraditions-jgordon-dev"&gt;
-				&lt;copy file="${properties.common.path}/_filter.ant_build.properties" tofile="${java.src.build.path}/ant_build.properties" filtering="false" overwrite="true" force="true"&gt;
-					&lt;filterset&gt;
-						&lt;filter token="mmm_instanceName" value="dev"/&gt;
-						&lt;filter token="mmm_machineName" value="jgordon"/&gt;
-						&lt;filter token="mmm_projectName" value="innertraditions"/&gt;
-					&lt;/filterset&gt;
-				&lt;/copy&gt;
-				&lt;antcall target="build.properties" inheritall="false" inheritrefs="false"/&gt;
-			&lt;/target&gt;
+        pre: code.xml.
+            &lt;target name="set.innertraditions-jgordon-dev"&gt;
+                &lt;copy file="${properties.common.path}/_filter.ant_build.properties" tofile="${java.src.build.path}/ant_build.properties" filtering="false" overwrite="true" force="true"&gt;
+                    &lt;filterset&gt;
+                        &lt;filter token="mmm_instanceName" value="dev"/&gt;
+                        &lt;filter token="mmm_machineName" value="jgordon"/&gt;
+                        &lt;filter token="mmm_projectName" value="innertraditions"/&gt;
+                    &lt;/filterset&gt;
+                &lt;/copy&gt;
+                &lt;antcall target="build.properties" inheritall="false" inheritrefs="false"/&gt;
+            &lt;/target&gt;
 
-		p To create your own instance, do the following:
+        p To create your own instance, do the following:
 
-		pre: code.
-			# Copy a "set..." target from instance-definitions-build.xml and modify the target name and the @mmm_@ variables.
-			# Go to the [CONFIG_ROOT]/developer_mdx_config/build and copy an instance (and if appropriate, machine) file(s) and modify with values appropriate to your instance.
+        pre: code.
+            # Copy a "set..." target from instance-definitions-build.xml and modify the target name and the @mmm_@ variables.
+            # Go to the [CONFIG_ROOT]/developer_mdx_config/build and copy an instance (and if appropriate, machine) file(s) and modify with values appropriate to your instance.
 
-	.section#ant_build
-		h1 More About ant_build.properties
+    .section#ant_build
+        h1 More About ant_build.properties
 
-		p The first file that is read is ant_build.properties. This file contains the three mmm_ properties which are used to determine which other property files will be read. The three properties are:
+        p The first file that is read is ant_build.properties. This file contains the three mmm_ properties which are used to determine which other property files will be read. The three properties are:
 
-		ul
-			li <code>mmm_projectName</code>: The name of the project, typically the client name. For example, "redwing".
-			li <code>mmm_machineName</code>: The name of the server where this application will be running. For example, "laptop".
-			li <code>mmm_instanceName</code>: Typically used to differentiate different releases. For example, "head", "production", "stage".
+        ul
+            li <code>mmm_projectName</code>: The name of the project, typically the client name. For example, "redwing".
+            li <code>mmm_machineName</code>: The name of the server where this application will be running. For example, "laptop".
+            li <code>mmm_instanceName</code>: Typically used to differentiate different releases. For example, "head", "production", "stage".
 
-		p The following property files will be selected based on the values of these properties. The order of the following files is the order in which they will be read. The first property assignment is the one that will be used, additional attempts to assign the property in lower files will not work--the value will not change.
+        p The following property files will be selected based on the values of these properties. The order of the following files is the order in which they will be read. The first property assignment is the one that will be used, additional attempts to assign the property in lower files will not work--the value will not change.
 
-		ul
-			li <code>${mmm_projectname}-${mmm_machinename}-${mmm_instancename}-instance.properties</code>: This file is the
-				| most specific and is used to modify properties that must be set for the given client, server, and release.
-			li <code>${mmm_machinename}-machine.properties</code> This file sets properties that apply to the server general.
-			li <code>${mmm_projectname}-project.properties</code> These properties define basic client preference and information.
-				| It is customary for this file to define the production values for things like server names and paths.
-			li <code>mdx-webapp.properties</code> This file contains the complete list of known application properties.
-				| This file provides default values. As a special validation check, the properties in this file must be equal to
-				|	the MdxProperties.MdxProperty enum.
+        ul
+            li <code>${mmm_projectname}-${mmm_machinename}-${mmm_instancename}-instance.properties</code>: This file is the
+                | most specific and is used to modify properties that must be set for the given client, server, and release.
+            li <code>${mmm_machinename}-machine.properties</code> This file sets properties that apply to the server general.
+            li <code>${mmm_projectname}-project.properties</code> These properties define basic client preference and information.
+                | It is customary for this file to define the production values for things like server names and paths.
+            li <code>mdx-webapp.properties</code> This file contains the complete list of known application properties.
+                | This file provides default values. As a special validation check, the properties in this file must be equal to
+                | the MdxProperties.MdxProperty enum.
 
     .section#props
         h1 Bulid Properties
@@ -115,4 +115,3 @@ block content
         p Application build properties and their defaults are defined in <code>MdxProperties.java</code>. Here's an annotated list.
 
         ul
-            li <code>

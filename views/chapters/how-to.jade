@@ -1,0 +1,25 @@
+extends ../includes/layout
+
+block sidebar
+    ul.nav.nav-list.bs-docs-sidenav.affix
+        +navItem("Configuration", "#overview")
+        +navItem("Upgrade Tomcat", "#upgradetomcat")
+
+
+block content
+    .section#overview
+        h1 Overview
+
+        p.
+            Find common tasks outlined here.
+
+    .section#upgradetomcat
+
+        h1 Upgrade Tomcat
+
+        ol
+            li Download the latest binary distribution from Apache: http://tomcat.apache.org/download-60.cgi.
+            li Make sure tomcat is stopped <code>ant stop.tomcat</code>.
+            li Extract the download file and copy the contents into the source tree: <code>mdx_pub/apache-tomcat-6.x.x</code>.
+            li Update the <code>mdx_pub/build.xml</code> setting the value of <code>src.tomcatInstall.path</code> to the path of the downloaded tomcat files.
+            li The next tomcat compile will update the tomcat runtime files.
